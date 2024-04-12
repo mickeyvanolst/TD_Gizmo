@@ -60,7 +60,7 @@ class extInteractionFramework:
 		"""Get a plane using the target TransformationMatrix to project on to!"""
 		return dimensionalUtils.Plane(
 			dimensionalUtils.CompPosition( targetComp ),
-			targetComp.transform() * tdu.Vector( 0, 0, 1)
+			targetComp.worldTransform * tdu.Vector( 0, 0, 1)
 		)
 	
 	def GetCompCameraPlane(self, targetComp:COMP):

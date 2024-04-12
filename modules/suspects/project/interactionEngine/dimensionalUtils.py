@@ -8,7 +8,7 @@ Info Header End'''
 from dataclasses import dataclass
 
 def CompPosition(targetComp:COMP) -> tdu.Vector:
-	return targetComp.transform() * tdu.Position( 0,0,0 )
+	return targetComp.worldTransform * tdu.Position( 0,0,0 )
 
 @dataclass
 class Plane():
