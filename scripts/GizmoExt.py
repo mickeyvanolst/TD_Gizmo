@@ -45,7 +45,7 @@ class GizmoExt:
 		self.SelectStartAxisYPos = tdu.Position()
 		self.SelectStartAxisZPos = tdu.Position()
 		self.SelectStartGizmoPos = tdu.Position()
-		
+		"""
 		#parent.gizmo.par.Mastermatrix = str(tdu.Matrix())
 		parent.gizmo.op('anchor_scale').setTransform(tdu.Matrix())
 		parent.gizmo.op('anchor_master').setTransform(tdu.Matrix())
@@ -63,24 +63,23 @@ class GizmoExt:
 		parent.gizmo.op('anchor_master').par.tx = m.decompose()[2][0]
 		parent.gizmo.op('anchor_master').par.ty = m.decompose()[2][1]
 		parent.gizmo.op('anchor_master').par.tz = m.decompose()[2][2]
-
+		"""
 
 	def myFunction(self, v):
 		debug(v)
 
 	def PromotedFunction(self, v):
 		debug(v)
-		
+"""		
 	def PrepareGeoComp(self, v):
 		op(v).par.pxform = True
 		op(v).par.xformmatrixop = parent.gizmo.op('out_matrix')
-	
+
 	def ResetMatrix(self):
 		parent.gizmo.par.Mastermatrix = str(tdu.Matrix())
 		parent.gizmo.op('anchor_master').setTransform(tdu.Matrix())
 		parent.gizmo.op('anchor_scale').setTransform(tdu.Matrix())
 
-"""	
 	def SetMasterMatrix(self, m:tdu.Matrix):
 		# tdu.Matrix(float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[0]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[4]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[8]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[12]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[1]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[5]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[9]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[13]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[2]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[6]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[10]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[14]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[3]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[7]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[11]), float(parent().par.Mastermatrix.eval().replace(',','').replace('[','').replace(']','').split()[15]))
 		# tdu.Matrix(*[float(x) for x in parent().par.Mastermatrix.eval().replace(',', '').replace('[', '').replace(']', '').split()])

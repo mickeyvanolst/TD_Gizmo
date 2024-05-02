@@ -1,6 +1,7 @@
-anchor = op('anchor')
-anchor_master = op('anchor_master')
-anchor_scale = op('anchor_scale')
+anchor = op('base/anchor')
+anchor_master = op('base/anchor_master')
+anchor_scale = op('base/anchor_scale')
+anchor_out = op('base/anchor_out')
 
 tx = anchor.op('tx/sop')
 ty = anchor.op('ty/sop')
@@ -71,8 +72,8 @@ def SelectEnd( Event, PrevEvent, interactionEngine, geoCOMP):
 	#m[1, 1] = anchor_scale.par.sy
 	#m[2, 2] = anchor_scale.par.sz
 
-	m = op('anchor_out').worldTransform
-	parent.gizmo.par.Mastermatrix = str(m)
+	#m = op('anchor_out').worldTransform
+	#parent.gizmo.par.Mastermatrix = str(m)
 
 	#anchor.setTransform(tdu.Matrix())
 	#anchor_scale.setTransform(tdu.Matrix())
@@ -174,7 +175,7 @@ def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractio
 		anchor.par.tx = (intersection_point_plane_x.x - mt.x) + ofsx.x #anchor_master.par.tx
 	
 	if interactionEngine.SelectStartEvent.PickSop == rx:
-		anchor.par.ry += remappedU#intersection_point_plane_x.x
+		anchor.par.ry += parent.gizmo.SelectStartPos - intersection_point_plane_x.x#remappedU#intersection_point_plane_x.x
 	if interactionEngine.SelectStartEvent.PickSop == ry:
 		anchor.par.rz -= remappedU#intersection_point_plane_y.y
 	if interactionEngine.SelectStartEvent.PickSop == rz:
@@ -186,6 +187,8 @@ def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractio
 		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)# anchor_master.par.ty
 	if interactionEngine.SelectStartEvent.PickSop == sz:
 		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)# anchor_master.par.tz
+	
+	parent.gizmo.setPreTransform(anchor_out.worldTransform)
 		
 
 def DropOn(Event, PrevEvent, interactionEngine, geoCOMP):
