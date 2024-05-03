@@ -8,7 +8,7 @@ A gizmo system based on RenderInteractionFramework. TD_Gizmo aims to be lightwei
 ## This repo is still very much WIP and not production ready, rather see it as a proof of concept.
 
 # Version
-2022.32660
+2023.11660
 
 # How to use
 Check Project.toe for in-depth examples.
