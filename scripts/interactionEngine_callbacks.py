@@ -11,14 +11,23 @@ def onHoverMove( Event:"InteractionEvent", PrevEvent:"InteractionEvent", interac
 	pass
 
 def onSelectStart(Event:"InteractionEvent", PrevEvent:"InteractionEvent", interactionEngine:"extInteractionFramework" ):
-	interactionEngine.PushCallback("SelectStart")
+	try:
+		interactionEngine.PushCallback("SelectStart")
+	except:
+		#Nothing selected actually
+		pass
 	pass
 
 def onSelectEnd(Event:"InteractionEvent", PrevEvent:"InteractionEvent", interactionEngine:"extInteractionFramework" ):
-	interactionEngine.PushCallback("SelectEnd")
+	
 	if Event.HoverComp and Event.HoverComp != Event.SelectedComp:
 		interactionEngine.PushCallback("DropOn")
-	Event.InteractiveComp.par.Dragging.val = False
+	try:
+		interactionEngine.PushCallback("SelectEnd")
+		Event.InteractiveComp.par.Dragging.val = False
+	except AttributeError:
+		#Nothing selected actually
+		pass
 	pass
 
 def onMove( Event:"InteractionEvent", PrevEvent:"InteractionEvent", interactionEngine:"extInteractionFramework" ):
