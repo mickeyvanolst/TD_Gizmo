@@ -117,8 +117,10 @@ def SelectStart( Event, PrevEvent, interactionEngine, geoCOMP):
 
 	parent.gizmo.SelectStartGizmoPos = tdu.Position(anchor.worldTransform.decompose()[2][0], anchor.worldTransform.decompose()[2][1], anchor.worldTransform.decompose()[2][2])
 
-	parent.gizmo.SelectSTartGizmoRotation = tdu.Vector(parent.gizmo.worldTransform.decompose()[1][0], parent.gizmo.worldTransform.decompose()[1][1], parent.gizmo.worldTransform.decompose()[1][2])
+	parent.gizmo.SelectStartGizmoRotation = tdu.Vector(parent.gizmo.worldTransform.decompose()[1][0], parent.gizmo.worldTransform.decompose()[1][1], parent.gizmo.worldTransform.decompose()[1][2])
 	
+	parent.gizmo.SelectStartGizmoScale = tdu.Vector(parent.gizmo.worldTransform.decompose()[0][0], parent.gizmo.worldTransform.decompose()[0][1], parent.gizmo.worldTransform.decompose()[0][2])
+
 	if Event.PickSop in [tx, ty, tz, sx, sy, sz, rx, ry, rz]:
 		setDragging(Event.PickSop, True)
 	pass
@@ -194,21 +196,21 @@ def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractio
 		parent.gizmo.par.rx = anchor.par.rx
 	
 	if interactionEngine.SelectStartEvent.PickSop == sx:
-		anchor_scale.par.sx = (intersection_point_plane_x.x - mt.x)
+		anchor_scale.par.sx = parent.gizmo.SelectStartGizmoScale.x + (intersection_point_plane_x.x - mt.x)
 	if interactionEngine.SelectStartEvent.PickSop == sy:
-		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)
+		anchor_scale.par.sy = parent.gizmo.SelectStartGizmoScale.y + (intersection_point_plane_y.y - mt.y)
 	if interactionEngine.SelectStartEvent.PickSop == sz:
-		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)
+		anchor_scale.par.sz = parent.gizmo.SelectStartGizmoScale.z + (intersection_point_plane_z.z - mt.z)
 
 	if interactionEngine.SelectStartEvent.PickSop == sxy:
-		anchor_scale.par.sx = (intersection_point_plane_x.x - mt.x)
-		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)
+		anchor_scale.par.sx = parent.gizmo.SelectStartGizmoScale.x + (intersection_point_plane_x.x - mt.x)
+		anchor_scale.par.sy = parent.gizmo.SelectStartGizmoScale.y + (intersection_point_plane_y.y - mt.y)
 	if interactionEngine.SelectStartEvent.PickSop == szy:
-		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)
-		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)
+		anchor_scale.par.sz = parent.gizmo.SelectStartGizmoScale.z + (intersection_point_plane_z.z - mt.z)
+		anchor_scale.par.sy = parent.gizmo.SelectStartGizmoScale.y + (intersection_point_plane_y.y - mt.y)
 	if interactionEngine.SelectStartEvent.PickSop == szx:
-		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)
-		anchor_scale.par.sx = (intersection_point_plane_x.x - mt.x)
+		anchor_scale.par.sz = parent.gizmo.SelectStartGizmoScale.z + (intersection_point_plane_z.z - mt.z)
+		anchor_scale.par.sx = parent.gizmo.SelectStartGizmoScale.x + (intersection_point_plane_x.x - mt.x)
 		
 
 def DropOn(Event, PrevEvent, interactionEngine, geoCOMP):
