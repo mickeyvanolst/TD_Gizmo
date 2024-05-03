@@ -199,6 +199,16 @@ def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractio
 		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)
 	if interactionEngine.SelectStartEvent.PickSop == sz:
 		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)
+
+	if interactionEngine.SelectStartEvent.PickSop == sxy:
+		anchor_scale.par.sx = (intersection_point_plane_x.x - mt.x)
+		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)
+	if interactionEngine.SelectStartEvent.PickSop == szy:
+		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)
+		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)
+	if interactionEngine.SelectStartEvent.PickSop == szx:
+		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)
+		anchor_scale.par.sx = (intersection_point_plane_x.x - mt.x)
 		
 
 def DropOn(Event, PrevEvent, interactionEngine, geoCOMP):
