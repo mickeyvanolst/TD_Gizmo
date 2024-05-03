@@ -5,7 +5,7 @@ A gizmo system based on RenderInteractionFramework. TD_Gizmo aims to be lightwei
 
 ![til](https://github.com/mickeyvanolst/TD_Gizmo/blob/main/TD_Editor.png?raw=true)
 
-## This repo is still very much WIP and not production ready, rather see it as a proof of concept.
+## This repo is still WIP and not production ready.
 
 # Version
 2023.11660
