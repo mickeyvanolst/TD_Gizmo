@@ -72,7 +72,13 @@ def SelectEnd( Event, PrevEvent, interactionEngine, geoCOMP):
 	parent.gizmo.par.pry = anchor.worldTransform.decompose()[1][1]
 	parent.gizmo.par.prz = anchor.worldTransform.decompose()[1][2]
 
-	parent.gizmo.setTransform(tdu.Matrix())
+	#parent.gizmo.setTransform(tdu.Matrix())
+	parent.gizmo.par.tx = 0
+	parent.gizmo.par.ty = 0
+	parent.gizmo.par.tz = 0
+	parent.gizmo.par.rx = 0
+	parent.gizmo.par.ry = 0
+	parent.gizmo.par.rz = 0
 	anchor.setTransform(tdu.Matrix())
 
 	for PrevEvent.PickSop in [tx, ty, tz, sx, sy, sz, rx, ry, rz]:
