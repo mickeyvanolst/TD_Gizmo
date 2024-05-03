@@ -50,6 +50,27 @@ def intersect_ray_plane_vectors(camera_pos, camera_dir, plane_normal, plane_poin
 	intersection_point = camera_pos + t * camera_dir
 	return intersection_point	
 
+render_w = op(anchor.par.Target.eval().par.Rendertop).width
+render_h = op(anchor.par.Target.eval().par.Rendertop).height
+	
+cam_wtf = anchor.par.Target.eval().par.Cameracomp.eval().worldTransform
+cam_pi = anchor.par.Target.eval().par.Cameracomp.eval().projectionInverse(render_w, render_h)
+
+u = anchor.par.Target.eval().par.Panelcomp.eval().panel.insideu
+v = anchor.par.Target.eval().par.Panelcomp.eval().panel.insidev
+remappedU     = tdu.remap( u, 0, 1, -1, 1)
+remappedV     = tdu.remap( v, 0, 1, -1, 1)
+pointNear     = cam_pi * tdu.Position(remappedU, remappedV, -1)
+pointFar      = cam_pi * tdu.Position(remappedU, remappedV, 1)
+dir           = cam_wtf * tdu.Vector( pointFar - pointNear )
+
+x_wtf = tx.parent().worldTransform
+y_wtf = ty.parent().worldTransform
+z_wtf = tz.parent().worldTransform
+intersection_point_plane_x = intersect_ray_plane(cam_wtf, dir, cam_pi, x_wtf)
+intersection_point_plane_y = intersect_ray_plane(cam_wtf, dir, cam_pi, y_wtf)
+intersection_point_plane_z = intersect_ray_plane(cam_wtf, dir, cam_pi, z_wtf)
+
 #def onExampleCallback(Event, PrevEvent, interactionEngine, geoCOMP):
 #	return
 
@@ -88,29 +109,6 @@ def SelectEnd( Event, PrevEvent, interactionEngine, geoCOMP):
 	pass
 
 def SelectStart( Event, PrevEvent, interactionEngine, geoCOMP):
-
-	render_w = op(anchor.par.Target.eval().par.Rendertop).width
-	render_h = op(anchor.par.Target.eval().par.Rendertop).height
-		
-	cam_wtf = anchor.par.Target.eval().par.Cameracomp.eval().worldTransform
-	cam_pi = anchor.par.Target.eval().par.Cameracomp.eval().projectionInverse(render_w, render_h)
-	
-	u = anchor.par.Target.eval().par.Panelcomp.eval().panel.insideu
-	v = anchor.par.Target.eval().par.Panelcomp.eval().panel.insidev
-	remappedU     = tdu.remap( u, 0, 1, -1, 1)
-	remappedV     = tdu.remap( v, 0, 1, -1, 1)
-	pointNear     = cam_pi * tdu.Position(remappedU, remappedV, -1)
-	pointFar      = cam_pi * tdu.Position(remappedU, remappedV, 1)
-	dir           = cam_wtf * tdu.Vector( pointFar - pointNear )
-	
-	x_wtf = tx.parent().worldTransform
-	y_wtf = ty.parent().worldTransform
-	z_wtf = tz.parent().worldTransform
-
-	intersection_point_plane_x = intersect_ray_plane(cam_wtf, dir, cam_pi, x_wtf)
-	intersection_point_plane_y = intersect_ray_plane(cam_wtf, dir, cam_pi, y_wtf)
-	intersection_point_plane_z = intersect_ray_plane(cam_wtf, dir, cam_pi, z_wtf)
-
 	parent.gizmo.SelectStartAxisXPos = intersection_point_plane_x
 	parent.gizmo.SelectStartAxisYPos = intersection_point_plane_y
 	parent.gizmo.SelectStartAxisZPos = intersection_point_plane_z
@@ -126,27 +124,6 @@ def SelectStart( Event, PrevEvent, interactionEngine, geoCOMP):
 	pass
 
 def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractionFramework", geoCOMP):	
-	render_w = op(anchor.par.Target.eval().par.Rendertop).width
-	render_h = op(anchor.par.Target.eval().par.Rendertop).height
-		
-	cam_wtf = anchor.par.Target.eval().par.Cameracomp.eval().worldTransform
-	cam_pi = anchor.par.Target.eval().par.Cameracomp.eval().projectionInverse(render_w, render_h)
-	
-	u = anchor.par.Target.eval().par.Panelcomp.eval().panel.insideu
-	v = anchor.par.Target.eval().par.Panelcomp.eval().panel.insidev
-	remappedU     = tdu.remap( u, 0, 1, -1, 1)
-	remappedV     = tdu.remap( v, 0, 1, -1, 1)
-	pointNear     = cam_pi * tdu.Position(remappedU, remappedV, -1)
-	pointFar      = cam_pi * tdu.Position(remappedU, remappedV, 1)
-	dir           = cam_wtf * tdu.Vector( pointFar - pointNear )
-	
-	x_wtf = tx.parent().worldTransform
-	y_wtf = ty.parent().worldTransform
-	z_wtf = tz.parent().worldTransform
-	intersection_point_plane_x = intersect_ray_plane(cam_wtf, dir, cam_pi, x_wtf)
-	intersection_point_plane_y = intersect_ray_plane(cam_wtf, dir, cam_pi, y_wtf)
-	intersection_point_plane_z = intersect_ray_plane(cam_wtf, dir, cam_pi, z_wtf)
-
 	s, r, t = anchor_master.worldTransform.decompose()
 	mt = tdu.Position(t)
 
