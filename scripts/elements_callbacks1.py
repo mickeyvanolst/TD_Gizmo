@@ -117,6 +117,8 @@ def SelectStart( Event, PrevEvent, interactionEngine, geoCOMP):
 
 	parent.gizmo.SelectStartGizmoPos = tdu.Position(anchor.worldTransform.decompose()[2][0], anchor.worldTransform.decompose()[2][1], anchor.worldTransform.decompose()[2][2])
 
+	parent.gizmo.SelectSTartGizmoRotation = tdu.Vector(parent.gizmo.worldTransform.decompose()[1][0], parent.gizmo.worldTransform.decompose()[1][1], parent.gizmo.worldTransform.decompose()[1][2])
+	
 	if Event.PickSop in [tx, ty, tz, sx, sy, sz, rx, ry, rz]:
 		setDragging(Event.PickSop, True)
 	pass
@@ -136,19 +138,12 @@ def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractio
 	pointFar      = cam_pi * tdu.Position(remappedU, remappedV, 1)
 	dir           = cam_wtf * tdu.Vector( pointFar - pointNear )
 	
-	#debug(interactionEngine.SelectStartEvent.PickSop)
-	#off_x = interactionEngine.SelectStartEvent.WorldSpaceProjection.x - (gizmo_master.worldTransform  * tdu.Position( 0,0,0 )).x
-	#off_y = interactionEngine.SelectStartEvent.WorldSpaceProjection.y - (gizmo_master.worldTransform  * tdu.Position( 0,0,0 )).y
-	#off_z = interactionEngine.SelectStartEvent.WorldSpaceProjection.z - (gizmo_master.worldTransform  * tdu.Position( 0,0,0 )).z
-	
 	x_wtf = tx.parent().worldTransform
 	y_wtf = ty.parent().worldTransform
 	z_wtf = tz.parent().worldTransform
 	intersection_point_plane_x = intersect_ray_plane(cam_wtf, dir, cam_pi, x_wtf)
 	intersection_point_plane_y = intersect_ray_plane(cam_wtf, dir, cam_pi, y_wtf)
 	intersection_point_plane_z = intersect_ray_plane(cam_wtf, dir, cam_pi, z_wtf)
-	
-	#debug(interactionEngine.SelectStartEvent.WorldSpaceProjection)
 
 	s, r, t = anchor_master.worldTransform.decompose()
 	mt = tdu.Position(t)
@@ -157,51 +152,53 @@ def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractio
 	ofsy:tdu.Position = parent.gizmo.SelectStartGizmoPos - parent.gizmo.SelectStartAxisYPos 
 	ofsz:tdu.Position = parent.gizmo.SelectStartGizmoPos - parent.gizmo.SelectStartAxisZPos 
 	if interactionEngine.SelectStartEvent.PickSop == tx:
-		anchor.par.tx = (intersection_point_plane_x.x - mt.x) + ofsx.x #anchor_master.par.tx
+		anchor.par.tx = (intersection_point_plane_x.x - mt.x) + ofsx.x
 		parent.gizmo.par.tx = anchor.par.tx
 	if interactionEngine.SelectStartEvent.PickSop == ty:
-		anchor.par.ty = (intersection_point_plane_y.y - mt.y) + ofsy.y #anchor_master.par.ty
+		anchor.par.ty = (intersection_point_plane_y.y - mt.y) + ofsy.y
 		parent.gizmo.par.ty = anchor.par.ty
 	if interactionEngine.SelectStartEvent.PickSop == tz:
-		anchor.par.tz = (intersection_point_plane_z.z - mt.z) + ofsz.z #anchor_master.par.tz
+		anchor.par.tz = (intersection_point_plane_z.z - mt.z) + ofsz.z
 		parent.gizmo.par.tz = anchor.par.tz
 	if interactionEngine.SelectStartEvent.PickSop == txy:
-		anchor.par.tx = (intersection_point_plane_x.x - mt.x) + ofsx.x #anchor_master.par.tx
-		anchor.par.ty = (intersection_point_plane_y.y - mt.y) + ofsy.y #anchor_master.par.ty
-
+		anchor.par.tx = (intersection_point_plane_x.x - mt.x) + ofsx.x
+		anchor.par.ty = (intersection_point_plane_y.y - mt.y) + ofsy.y
 		parent.gizmo.par.tx = anchor.par.tx
 		parent.gizmo.par.ty = anchor.par.ty
 	if interactionEngine.SelectStartEvent.PickSop == tzy:
-		anchor.par.tz = (intersection_point_plane_z.z - mt.z) + ofsz.z #anchor_master.par.tz
-		anchor.par.ty = (intersection_point_plane_y.y - mt.y) + ofsy.y #anchor_master.par.ty
-
+		anchor.par.tz = (intersection_point_plane_z.z - mt.z) + ofsz.z
+		anchor.par.ty = (intersection_point_plane_y.y - mt.y) + ofsy.y
 		parent.gizmo.par.tz = anchor.par.tz
 		parent.gizmo.par.ty = anchor.par.ty
 	if interactionEngine.SelectStartEvent.PickSop == tzx:
-		anchor.par.tz = (intersection_point_plane_z.z - mt.z) + ofsz.z #anchor_master.par.tz
-		anchor.par.tx = (intersection_point_plane_x.x - mt.x) + ofsx.x #anchor_master.par.tx
-
+		anchor.par.tz = (intersection_point_plane_z.z - mt.z) + ofsz.z
+		anchor.par.tx = (intersection_point_plane_x.x - mt.x) + ofsx.x
 		parent.gizmo.par.tz = anchor.par.tz
 		parent.gizmo.par.tx = anchor.par.tx
 	
 	if interactionEngine.SelectStartEvent.PickSop == rx:
-		anchor.par.ry += (parent.gizmo.SelectStartAxisXPos.x - intersection_point_plane_x.x) * 0.2#remappedU#intersection_point_plane_x.x
+		v = (parent.gizmo.SelectStartAxisXPos.x - intersection_point_plane_x.x) * 0.2
+		v = max(-2, min(v, 2))
+		anchor.par.ry += v #remappedU#intersection_point_plane_x.x
+		#anchor.par.ry = parent.gizmo.SelectSTartGizmoRotation.y + tdu.Vector(parent.gizmo.SelectStartGizmoPos.x + ofsx.x, parent.gizmo.SelectStartGizmoPos.y + ofsx.y, parent.gizmo.SelectStartGizmoPos.z + ofsx.z).distance(tdu.Vector(intersection_point_plane_y.x, intersection_point_plane_y.y, intersection_point_plane_y.z))# ((intersection_point_plane_y.y -mt.y) + ofsy.y)
 		parent.gizmo.par.ry = anchor.par.ry
 	if interactionEngine.SelectStartEvent.PickSop == ry:
-		anchor.par.rz -= (parent.gizmo.SelectStartAxisYPos.z - intersection_point_plane_y.y) * 0.2#remappedU#intersection_point_plane_y.y
+		v = (parent.gizmo.SelectStartAxisYPos.z - intersection_point_plane_y.y) * 0.2
+		v = max(-2, min(v, 2))
+		anchor.par.rz -= v #remappedU#intersection_point_plane_y.y
 		parent.gizmo.par.rz = anchor.par.rz
 	if interactionEngine.SelectStartEvent.PickSop == rz:
-		anchor.par.rx -= (parent.gizmo.SelectStartAxisZPos.x - intersection_point_plane_z.z) * 0.2#remappedV#intersection_point_plane_z.z
+		v = (parent.gizmo.SelectStartAxisZPos.x - intersection_point_plane_z.z) * 0.2
+		v = max(-2, min(v, 2))
+		anchor.par.rx -= v #remappedV#intersection_point_plane_z.z
 		parent.gizmo.par.rx = anchor.par.rx
 	
 	if interactionEngine.SelectStartEvent.PickSop == sx:
-		anchor_scale.par.sx = (intersection_point_plane_x.x - mt.x) #anchor_master.par.tx
+		anchor_scale.par.sx = (intersection_point_plane_x.x - mt.x)
 	if interactionEngine.SelectStartEvent.PickSop == sy:
-		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)# anchor_master.par.ty
+		anchor_scale.par.sy = (intersection_point_plane_y.y - mt.y)
 	if interactionEngine.SelectStartEvent.PickSop == sz:
-		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)# anchor_master.par.tz
-	
-	#parent.gizmo.setPreTransform(anchor_out.worldTransform)
+		anchor_scale.par.sz = (intersection_point_plane_z.z - mt.z)
 		
 
 def DropOn(Event, PrevEvent, interactionEngine, geoCOMP):
