@@ -14,20 +14,20 @@ def onSelectStart(Event:"InteractionEvent", PrevEvent:"InteractionEvent", intera
 	try:
 		interactionEngine.PushCallback("SelectStart")
 	except:
-		#Nothing selected actually
+		# nothing selected
 		pass
 	pass
 
 def onSelectEnd(Event:"InteractionEvent", PrevEvent:"InteractionEvent", interactionEngine:"extInteractionFramework" ):
-	
-	if Event.HoverComp and Event.HoverComp != Event.SelectedComp:
-		interactionEngine.PushCallback("DropOn")
 	try:
+		if Event.HoverComp and Event.HoverComp != Event.SelectedComp:
+			interactionEngine.PushCallback("DropOn")
 		interactionEngine.PushCallback("SelectEnd")
 		Event.InteractiveComp.par.Dragging.val = False
-	except AttributeError:
-		#Nothing selected actually
+	except:
+		# nothing selected
 		pass
+	
 	pass
 
 def onMove( Event:"InteractionEvent", PrevEvent:"InteractionEvent", interactionEngine:"extInteractionFramework" ):
