@@ -119,6 +119,8 @@ def SelectStart( Event, PrevEvent, interactionEngine, geoCOMP):
 	
 	parent.gizmo.SelectStartGizmoScale = tdu.Vector(parent.gizmo.worldTransform.decompose()[0][0], parent.gizmo.worldTransform.decompose()[0][1], parent.gizmo.worldTransform.decompose()[0][2])
 
+	parent.gizmo.SelectStartCursorPos = tdu.Vector(op('panel1')['insideu'], op('panel1')['insidev'], 0)
+
 	if Event.PickSop in [tx, ty, tz, sx, sy, sz, rx, ry, rz]:
 		setDragging(Event.PickSop, True)
 	pass
@@ -155,6 +157,11 @@ def Moving(Event:"InteractionEvent", PrevEvent, interactionEngine:"extInteractio
 		parent.gizmo.par.tz = anchor.par.tz
 		parent.gizmo.par.tx = anchor.par.tx
 	
+
+	#cursor_cur = tdu.Vector(op('panel1')['insideu'], op('panel1')['insidev'], 0)
+	cursor_start = parent.gizmo.SelectStartCursorPos
+	print(cursor_start)
+
 	if interactionEngine.SelectStartEvent.PickSop == rx:
 		v = (parent.gizmo.SelectStartAxisXPos.x - intersection_point_plane_x.x) * 0.2
 		v = max(-2, min(v, 2))

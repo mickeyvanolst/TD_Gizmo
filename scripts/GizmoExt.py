@@ -15,4 +15,5 @@ class GizmoExt:
 		self.SelectStartGizmoPos = tdu.Position()
 		self.SelectStartGizmoRotation = tdu.Vector()
 		self.SelectStartGizmoScale = tdu.Vector()
+		self.SelectStartCursorPos = tdu.Vector()
 		self.IsHovering = False
